@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="FillBlankView">
         <attr name="blankNum" format="integer"/>
-        <attr name="blankMargin" format="dimension"/>
+        <attr name="blankSpace" format="dimension"/>
         <attr name="blankSolidColor" format="color"/>
         <attr name="blankStrokeColor" format="color"/>
         <attr name="blankStrokeWidth" format="dimension"/>
