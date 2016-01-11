@@ -97,7 +97,6 @@ public class FillBlankView extends EditText {
 
         mPaintDot = new Paint();
         mPaintDot.setAntiAlias(true);
-        mPaintDot.setColor(mDotColor);
 
         addTextChangedListener(new TextWatcher() {
             @Override
@@ -211,6 +210,7 @@ public class FillBlankView extends EditText {
             canvas.drawText(mPrefixStr, mRectFs[0].centerX(), textCenterY, mPaintText);
         }
 
+        mPaintDot.setColor(mDotColor);
         mPaintText.setTextAlign(Paint.Align.CENTER);
         for (int i = 0; i < mBlankNum; i++) {
             if (isHideText && dotCount > 0) {
@@ -265,6 +265,111 @@ public class FillBlankView extends EditText {
         if (mSuffixStr != null)
             builder.append(mSuffixStr);
         return builder.toString();
+    }
+
+    public int getBlankNum() {
+        return mBlankNum;
+    }
+
+    public void setBlankNum(int blankNum) {
+        mBlankNum = blankNum;
+        if (mBlankNum <= 0) {
+            throw new IllegalArgumentException("the 'blankNum' must be greater than zero !");
+        }
+        initSizes();
+        invalidate();
+    }
+
+    public int getBlankSpace() {
+        return mBlankSpace;
+    }
+
+    public void setBlankSpace(int blankSpace) {
+        mBlankSpace = blankSpace;
+        if (mBlankNum <= 0) {
+            throw new IllegalArgumentException("the 'blankSpace' must be greater than zero !");
+        }
+        initSizes();
+        invalidate();
+    }
+
+    public int getBlankSolidColor() {
+        return mBlankSolidColor;
+    }
+
+    public void setBlankSolidColor(int blankSolidColor) {
+        mBlankSolidColor = blankSolidColor;
+        invalidate();
+    }
+
+    public int getBlankStrokeColor() {
+        return mBlankStrokeColor;
+    }
+
+    public void setBlankStrokeColor(int blankStrokeColor) {
+        mBlankStrokeColor = blankStrokeColor;
+        invalidate();
+    }
+
+    public int getBlankStrokeWidth() {
+        return mBlankStrokeWidth;
+    }
+
+    public void setBlankStrokeWidth(int blankStrokeWidth) {
+        mBlankStrokeWidth = blankStrokeWidth;
+        invalidate();
+    }
+
+    public int getBlankCornerRadius() {
+        return mBlankCornerRadius;
+    }
+
+    public void setBlankCornerRadius(int blankCornerRadius) {
+        mBlankCornerRadius = blankCornerRadius;
+        invalidate();
+    }
+
+    public boolean isHideText() {
+        return isHideText;
+    }
+
+    public void setHideText(boolean isHideText) {
+        this.isHideText = isHideText;
+        invalidate();
+    }
+
+    public int getDotSize() {
+        return mDotSize;
+    }
+
+    public void setDotSize(int dotSize) {
+        mDotSize = dotSize;
+        invalidate();
+    }
+
+    public int getDotColor() {
+        return mDotColor;
+    }
+
+    public void setDotColor(int dotColor) {
+        mDotColor = dotColor;
+        invalidate();
+    }
+
+    public int getTextMatchedColor() {
+        return mTextMatchedColor;
+    }
+
+    public void setTextMatchedColor(int textMatchedColor) {
+        mTextMatchedColor = textMatchedColor;
+    }
+
+    public int getTextNotMatchedColor() {
+        return mTextNotMatchedColor;
+    }
+
+    public void setTextNotMatchedColor(int textNotMatchedColor) {
+        mTextNotMatchedColor = textNotMatchedColor;
     }
 
     public OnMobileMatchedListener getOnMobileMatchedListener() {
