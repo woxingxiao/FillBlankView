@@ -38,6 +38,7 @@ public class FillBlankView extends EditText {
     private Paint mPaintDot;
     private RectF[] mRectFs;
     private Rect mRect;
+    private RectF mRectBig;
     private Rect mTextRect;
     private String mPrefixStr;
     private String mSuffixStr;
@@ -176,6 +177,11 @@ public class FillBlankView extends EditText {
             mRectFs[i] = new RectF(left, top, right, bottom);
         }
         mRect = new Rect(0, 0, getWidth(), getHeight());
+
+        if (mBlankSpace == 0) {
+            mRectBig = new RectF(getPaddingLeft(), getPaddingTop(),
+                    getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
+        }
     }
 
     @Override
@@ -190,14 +196,29 @@ public class FillBlankView extends EditText {
                 continue;
             if (i == mRectFs.length - 1 && mSuffixStr != null)
                 break;
+
             mPaintBlank.setStyle(Paint.Style.FILL);
             mPaintBlank.setColor(mBlankSolidColor);
             canvas.drawRoundRect(mRectFs[i], mBlankCornerRadius, mBlankCornerRadius, mPaintBlank);
-            if (mBlankStrokeWidth > 0 && mBlankSolidColor != mBlankStrokeColor) {
+
+            if (mBlankStrokeWidth > 0) {
                 mPaintBlank.setStyle(Paint.Style.STROKE);
                 mPaintBlank.setColor(mBlankStrokeColor);
                 mPaintBlank.setStrokeWidth(mBlankStrokeWidth);
-                canvas.drawRoundRect(mRectFs[i], mBlankCornerRadius, mBlankCornerRadius, mPaintBlank);
+                if (mBlankSpace > 0 && mBlankSolidColor != mBlankStrokeColor) {
+                    canvas.drawRoundRect(mRectFs[i], mBlankCornerRadius, mBlankCornerRadius, mPaintBlank);
+                } else if (mBlankSpace == 0) {
+                    mPaintBlank.setAlpha(110);
+                    mPaintBlank.setStrokeWidth(mBlankStrokeWidth / 2.0f);
+                    canvas.drawLine(mRectFs[i].right, mRectFs[i].top, mRectFs[i].right, mRectFs[i].bottom, mPaintBlank);
+
+                    if (i == mRectFs.length - 2) {
+                        mPaintBlank.setAlpha(255);
+                        mPaintBlank.setStrokeWidth(mBlankStrokeWidth);
+                        canvas.drawRoundRect(mRectBig, mBlankCornerRadius, mBlankCornerRadius, mPaintBlank);
+                        break;
+                    }
+                }
             }
         }
 
@@ -286,8 +307,8 @@ public class FillBlankView extends EditText {
 
     public void setBlankSpace(int blankSpace) {
         mBlankSpace = blankSpace;
-        if (mBlankNum <= 0) {
-            throw new IllegalArgumentException("the 'blankSpace' must be greater than zero !");
+        if (mBlankSpace < 0) {
+            throw new IllegalArgumentException("the 'blankSpace' can be less than zero !");
         }
         initSizes();
         invalidate();

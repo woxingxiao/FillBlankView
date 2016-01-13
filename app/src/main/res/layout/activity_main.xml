@@ -24,6 +24,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:padding="5dp"
+        app:blankCornerRadius="4dp"
         app:hideText="true"/>
 
     <com.repo.xw.fillblankviewdemo.FillBlankView
