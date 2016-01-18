@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         textFillBlankView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, PasswordDemoActivity.class));
+                startActivity(new Intent(MainActivity.this, TextDemoActivity.class));
             }
         });
     }

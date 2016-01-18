@@ -1,12 +1,9 @@
 package com.repo.xw.fillblankviewdemo;
 
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 
 public class PasswordDemoActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -125,13 +122,4 @@ public class PasswordDemoActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public void showInputMethod(EditText editText) {
-        editText.setFocusable(true);
-        editText.setFocusableInTouchMode(true);
-        editText.requestFocus();
-
-        InputMethodManager inputManager = (InputMethodManager) editText.getContext().getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        inputManager.showSoftInput(editText, 0);
-    }
 }

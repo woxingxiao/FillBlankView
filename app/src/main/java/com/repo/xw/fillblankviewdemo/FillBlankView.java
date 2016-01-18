@@ -166,7 +166,7 @@ public class FillBlankView extends EditText {
         for (int i = 0; i < mRectFs.length; i++) {
             if (i == 0) {
                 left = getPaddingLeft();
-                right = width + getPaddingLeft();
+                right = left + width;
             } else {
                 left = width * i + mBlankSpace * i + getPaddingLeft();
                 right = width * (i + 1) + mBlankSpace * i + getPaddingLeft();
@@ -226,7 +226,7 @@ public class FillBlankView extends EditText {
         if (mPrefixStr != null) {
             mPaintText.setTextAlign(Paint.Align.RIGHT);
             mPaintText.getTextBounds(mPrefixStr, 0, mPrefixStr.length(), mTextRect);
-            canvas.drawText(mPrefixStr, mRectFs[0].centerX(), textCenterY, mPaintText);
+            canvas.drawText(mPrefixStr, mRectFs[1].left - mBlankSpace, textCenterY, mPaintText);
         }
 
         mPaintDot.setColor(mDotColor);
@@ -235,17 +235,25 @@ public class FillBlankView extends EditText {
             if (isHideText && dotCount > 0) {
                 if (i + 1 > dotCount)
                     break;
-                canvas.drawCircle(mRectFs[i].centerX(), mRectFs[i].centerY(), mDotSize, mPaintDot);
+                if (mPrefixStr == null) {
+                    canvas.drawCircle(mRectFs[i].centerX(), mRectFs[i].centerY(), mDotSize, mPaintDot);
+                } else {
+                    canvas.drawCircle(mRectFs[i + 1].centerX(), mRectFs[i + 1].centerY(), mDotSize, mPaintDot);
+                }
             } else {
                 mPaintText.getTextBounds(mBlankStrings[i], 0, mBlankStrings[i].length(), mTextRect);
-                canvas.drawText(mBlankStrings[i], mRectFs[i].centerX(), textCenterY, mPaintText);
+                if (mPrefixStr == null) {
+                    canvas.drawText(mBlankStrings[i], mRectFs[i].centerX(), textCenterY, mPaintText);
+                } else {
+                    canvas.drawText(mBlankStrings[i], mRectFs[i + 1].centerX(), textCenterY, mPaintText);
+                }
             }
         }
 
         if (mSuffixStr != null) {
             mPaintText.setTextAlign(Paint.Align.LEFT);
             mPaintText.getTextBounds(mSuffixStr, 0, mSuffixStr.length(), mTextRect);
-            canvas.drawText(mSuffixStr, mRectFs[mRectFs.length - 1].centerX(), textCenterY, mPaintText);
+            canvas.drawText(mSuffixStr, mRectFs[mRectFs.length - 1].left, textCenterY, mPaintText);
         }
     }
 
@@ -268,6 +276,7 @@ public class FillBlankView extends EditText {
             throw new IllegalArgumentException("the sum of prefixLength and suffixLength must be less " +
                     "than length of originalText");
         }
+        mBlankNum = originalText.length() - prefixLength - suffixLength;
         mPrefixStr = originalText.substring(0, prefixLength);
         mSuffixStr = originalText.substring(originalText.length() - suffixLength, originalText.length());
 
@@ -291,6 +300,9 @@ public class FillBlankView extends EditText {
     }
 
     public void setBlankNum(int blankNum) {
+        if (mPrefixStr != null || mSuffixStr != null)
+            return;
+
         mBlankNum = blankNum;
         if (mBlankNum <= 0) {
             throw new IllegalArgumentException("the 'blankNum' must be greater than zero !");

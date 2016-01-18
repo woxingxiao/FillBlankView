@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,17 +12,31 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
-    <com.repo.xw.fillblankviewdemo.FillBlankView
-        android:id="@+id/show_password_demo"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="5dp"/>
+        android:layout_height="wrap_content"
+        app:cardElevation="3dp">
 
-    <com.repo.xw.fillblankviewdemo.FillBlankView
-        android:id="@+id/show_text_demo"
+        <com.repo.xw.fillblankviewdemo.FillBlankView
+            android:id="@+id/show_password_demo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            app:blankCornerRadius="4dp"/>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:padding="5dp"/>
+        app:cardElevation="3dp">
+
+        <com.repo.xw.fillblankviewdemo.FillBlankView
+            android:id="@+id/show_text_demo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            app:blankCornerRadius="4dp"/>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>
