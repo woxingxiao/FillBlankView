@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,99 +12,16 @@
     tools:context=".MainActivity">
 
     <com.repo.xw.fillblankviewdemo.FillBlankView
-        android:id="@+id/fill_blank_view1"
+        android:id="@+id/show_password_demo"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:padding="5dp"/>
 
     <com.repo.xw.fillblankviewdemo.FillBlankView
-        android:id="@+id/fill_blank_view2"
+        android:id="@+id/show_text_demo"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:padding="5dp"
-        app:blankCornerRadius="4dp"
-        app:hideText="true"/>
+        android:layout_marginTop="20dp"
+        android:padding="5dp"/>
 
-    <com.repo.xw.fillblankviewdemo.FillBlankView
-        android:id="@+id/fill_blank_view3"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:padding="5dp"
-        app:blankCornerRadius="3dp"
-        app:blankSolidColor="#03A9F4"
-        app:blankSpace="10dp"
-        app:blankStrokeWidth="0dp"/>
-
-    <com.repo.xw.fillblankviewdemo.FillBlankView
-        android:id="@+id/fill_blank_view4"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:padding="5dp"
-        app:blankCornerRadius="4dp"
-        app:blankSolidColor="#FFC107"
-        app:blankSpace="10dp"
-        app:blankStrokeColor="#4CAF50"
-        app:blankStrokeWidth="1dp"
-        app:dotColor="#4CAF50"
-        app:dotSize="5dp"
-        app:hideText="true"/>
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:columnCount="3"
-        android:rowCount="4">
-
-        <Button
-            android:id="@+id/button1"
-            android:text="1"/>
-
-        <Button
-            android:id="@+id/button2"
-            android:text="2"/>
-
-        <Button
-            android:id="@+id/button3"
-            android:text="3"/>
-
-        <Button
-            android:id="@+id/button4"
-            android:text="4"/>
-
-        <Button
-            android:id="@+id/button5"
-            android:text="5"/>
-
-        <Button
-            android:id="@+id/button6"
-            android:text="6"/>
-
-        <Button
-            android:id="@+id/button7"
-            android:text="7"/>
-
-        <Button
-            android:id="@+id/button8"
-            android:text="8"/>
-
-        <Button
-            android:id="@+id/button9"
-            android:text="9"/>
-
-        <Button
-            android:id="@+id/button10"
-            android:text=""/>
-
-        <Button
-            android:id="@+id/button11"
-            android:text="0"/>
-
-        <Button
-            android:id="@+id/button12"
-            android:text="delete"/>
-    </GridLayout>
 </LinearLayout>

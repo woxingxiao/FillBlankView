@@ -9,7 +9,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -77,7 +76,6 @@ public class FillBlankView extends EditText {
     }
 
     private void initObjects() {
-        setInputType(InputType.TYPE_CLASS_NUMBER);
         setCursorVisible(false);
 
         if (mBlankNum <= 0) {
@@ -297,6 +295,9 @@ public class FillBlankView extends EditText {
         if (mBlankNum <= 0) {
             throw new IllegalArgumentException("the 'blankNum' must be greater than zero !");
         }
+        mBlankStrings = new String[mBlankNum];
+        for (int i = 0; i < mBlankStrings.length; i++)
+            mBlankStrings[i] = "";
         initSizes();
         invalidate();
     }
