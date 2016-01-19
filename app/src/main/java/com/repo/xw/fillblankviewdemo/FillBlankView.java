@@ -44,7 +44,7 @@ public class FillBlankView extends EditText {
     private String[] mBlankStrings;
     private int dotCount;
 
-    private OnMobileMatchedListener mListener;
+    private OnTextMatchedListener mListener;
     private String originalText;
 
     public FillBlankView(Context context) {
@@ -118,6 +118,8 @@ public class FillBlankView extends EditText {
                 dotCount = s.length();
 
                 mPaintText.setColor(getCurrentTextColor());
+                if (isHideText)
+                    mPaintDot.setColor(mDotColor);
                 for (int i = 0; i < mBlankNum; i++) {
                     if (i < s.length()) {
                         mBlankStrings[i] = s.subSequence(i, i + 1).toString();
@@ -126,14 +128,22 @@ public class FillBlankView extends EditText {
                     }
                 }
 
-                if (s.length() == mBlankNum && mListener != null) {
-                    if (getFilledText().equals(originalText)) {
+                if (getFilledText().equals(originalText)) {
+                    if (s.length() == mBlankNum) {
                         mPaintText.setColor(mTextMatchedColor);
-                        mListener.matched(true, originalText);
-                    } else {
-                        mPaintText.setColor(mTextNotMatchedColor);
-                        mListener.matched(false, null);
+                        if (isHideText && mTextMatchedColor != getCurrentTextColor())
+                            mPaintDot.setColor(mTextMatchedColor);
                     }
+                    if (mListener != null)
+                        mListener.matched(true, originalText);
+                } else {
+                    if (s.length() == mBlankNum) {
+                        mPaintText.setColor(mTextNotMatchedColor);
+                        if (isHideText && mTextNotMatchedColor != getCurrentTextColor())
+                            mPaintDot.setColor(mTextNotMatchedColor);
+                    }
+                    if (mListener != null)
+                        mListener.matched(false, null);
                 }
 
                 invalidate();
@@ -150,9 +160,9 @@ public class FillBlankView extends EditText {
     private void initSizes() {
         int viewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         int column;
-        if (mPrefixStr == null && mSuffixStr == null) {
+        if (isEmptyString(mPrefixStr) && isEmptyString(mSuffixStr)) {
             column = mBlankNum;
-        } else if (mPrefixStr != null && mSuffixStr != null) {
+        } else if (!isEmptyString(mPrefixStr) && !isEmptyString(mSuffixStr)) {
             column = mBlankNum + 2;
         } else {
             column = mBlankNum + 1;
@@ -177,8 +187,19 @@ public class FillBlankView extends EditText {
         mRect = new Rect(0, 0, getWidth(), getHeight());
 
         if (mBlankSpace == 0) {
-            mRectBig = new RectF(getPaddingLeft(), getPaddingTop(),
-                    getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
+            if (!isEmptyString(mPrefixStr) && !isEmptyString(mSuffixStr)) {
+                mRectBig = new RectF(mRectFs[1].left, getPaddingTop(),
+                        mRectFs[mRectFs.length - 2].right, getHeight() - getPaddingBottom());
+            } else if (!isEmptyString(mPrefixStr) && isEmptyString(mSuffixStr)) {
+                mRectBig = new RectF(mRectFs[1].left, getPaddingTop(),
+                        getWidth() - getPaddingLeft(), getHeight() - getPaddingBottom());
+            } else if (isEmptyString(mPrefixStr) && !isEmptyString(mSuffixStr)) {
+                mRectBig = new RectF(getPaddingLeft(), getPaddingTop(),
+                        mRectFs[mRectFs.length - 2].right, getHeight() - getPaddingBottom());
+            } else {
+                mRectBig = new RectF(getPaddingLeft(), getPaddingTop(),
+                        getWidth() - getPaddingLeft(), getHeight() - getPaddingBottom());
+            }
         }
     }
 
@@ -186,13 +207,16 @@ public class FillBlankView extends EditText {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (getBackground() == null)
+        if (getBackground() == null) {
             canvas.drawColor(Color.WHITE);
+        } else {
+            getBackground().draw(canvas);
+        }
 
         for (int i = 0; i < mRectFs.length; i++) {
-            if (i == 0 && mPrefixStr != null)
+            if (i == 0 && !isEmptyString(mPrefixStr))
                 continue;
-            if (i == mRectFs.length - 1 && mSuffixStr != null)
+            if (mRectFs.length > 1 && i == mRectFs.length - 1 && !isEmptyString(mSuffixStr))
                 break;
 
             mPaintBlank.setStyle(Paint.Style.FILL);
@@ -206,15 +230,19 @@ public class FillBlankView extends EditText {
                 if (mBlankSpace > 0 && mBlankSolidColor != mBlankStrokeColor) {
                     canvas.drawRoundRect(mRectFs[i], mBlankCornerRadius, mBlankCornerRadius, mPaintBlank);
                 } else if (mBlankSpace == 0) {
-                    mPaintBlank.setAlpha(110);
-                    mPaintBlank.setStrokeWidth(mBlankStrokeWidth / 2.0f);
-                    canvas.drawLine(mRectFs[i].right, mRectFs[i].top, mRectFs[i].right, mRectFs[i].bottom, mPaintBlank);
+                    if (mBlankNum > 1) {
+                        mPaintBlank.setAlpha(110);
+                        mPaintBlank.setStrokeWidth(mBlankStrokeWidth / 2.0f);
+                        canvas.drawLine(mRectFs[i].right, mRectFs[i].top, mRectFs[i].right, mRectFs[i].bottom, mPaintBlank);
 
-                    if (i == mRectFs.length - 2) {
-                        mPaintBlank.setAlpha(255);
-                        mPaintBlank.setStrokeWidth(mBlankStrokeWidth);
+                        if (i == mRectFs.length - 2) {
+                            mPaintBlank.setAlpha(255);
+                            mPaintBlank.setStrokeWidth(mBlankStrokeWidth);
+                            canvas.drawRoundRect(mRectBig, mBlankCornerRadius, mBlankCornerRadius, mPaintBlank);
+                            break;
+                        }
+                    } else if (mBlankNum == 1) {
                         canvas.drawRoundRect(mRectBig, mBlankCornerRadius, mBlankCornerRadius, mPaintBlank);
-                        break;
                     }
                 }
             }
@@ -223,26 +251,25 @@ public class FillBlankView extends EditText {
         Paint.FontMetricsInt fontMetrics = mPaintText.getFontMetricsInt();
         int textCenterY = (mRect.bottom + mRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
 
-        if (mPrefixStr != null) {
+        if (!isEmptyString(mPrefixStr)) {
             mPaintText.setTextAlign(Paint.Align.RIGHT);
             mPaintText.getTextBounds(mPrefixStr, 0, mPrefixStr.length(), mTextRect);
             canvas.drawText(mPrefixStr, mRectFs[1].left - mBlankSpace, textCenterY, mPaintText);
         }
 
-        mPaintDot.setColor(mDotColor);
         mPaintText.setTextAlign(Paint.Align.CENTER);
         for (int i = 0; i < mBlankNum; i++) {
             if (isHideText && dotCount > 0) {
                 if (i + 1 > dotCount)
                     break;
-                if (mPrefixStr == null) {
+                if (isEmptyString(mPrefixStr)) {
                     canvas.drawCircle(mRectFs[i].centerX(), mRectFs[i].centerY(), mDotSize, mPaintDot);
                 } else {
                     canvas.drawCircle(mRectFs[i + 1].centerX(), mRectFs[i + 1].centerY(), mDotSize, mPaintDot);
                 }
             } else {
                 mPaintText.getTextBounds(mBlankStrings[i], 0, mBlankStrings[i].length(), mTextRect);
-                if (mPrefixStr == null) {
+                if (isEmptyString(mPrefixStr)) {
                     canvas.drawText(mBlankStrings[i], mRectFs[i].centerX(), textCenterY, mPaintText);
                 } else {
                     canvas.drawText(mBlankStrings[i], mRectFs[i + 1].centerX(), textCenterY, mPaintText);
@@ -250,7 +277,7 @@ public class FillBlankView extends EditText {
             }
         }
 
-        if (mSuffixStr != null) {
+        if (!isEmptyString(mSuffixStr)) {
             mPaintText.setTextAlign(Paint.Align.LEFT);
             mPaintText.getTextBounds(mSuffixStr, 0, mSuffixStr.length(), mTextRect);
             canvas.drawText(mSuffixStr, mRectFs[mRectFs.length - 1].left, textCenterY, mPaintText);
@@ -265,6 +292,12 @@ public class FillBlankView extends EditText {
         this.originalText = originalText;
         if (originalText.isEmpty())
             return;
+
+        mBlankNum = originalText.length();
+        mBlankStrings = new String[mBlankNum];
+        for (int i = 0; i < mBlankStrings.length; i++)
+            mBlankStrings[i] = "";
+        initSizes();
         invalidate();
     }
 
@@ -279,14 +312,16 @@ public class FillBlankView extends EditText {
         mBlankNum = originalText.length() - prefixLength - suffixLength;
         mPrefixStr = originalText.substring(0, prefixLength);
         mSuffixStr = originalText.substring(originalText.length() - suffixLength, originalText.length());
-
+        mBlankStrings = new String[mBlankNum];
+        for (int i = 0; i < mBlankStrings.length; i++)
+            mBlankStrings[i] = "";
         initSizes();
         invalidate();
     }
 
     public String getFilledText() {
         StringBuilder builder = new StringBuilder();
-        if (mPrefixStr != null)
+        if (!isEmptyString(mPrefixStr))
             builder.append(mPrefixStr);
         for (String s : mBlankStrings)
             builder.append(s);
@@ -300,7 +335,7 @@ public class FillBlankView extends EditText {
     }
 
     public void setBlankNum(int blankNum) {
-        if (mPrefixStr != null || mSuffixStr != null)
+        if (!isEmptyString(mPrefixStr) || !isEmptyString(mSuffixStr))
             return;
 
         mBlankNum = blankNum;
@@ -406,11 +441,11 @@ public class FillBlankView extends EditText {
         mTextNotMatchedColor = textNotMatchedColor;
     }
 
-    public OnMobileMatchedListener getOnMobileMatchedListener() {
+    public OnTextMatchedListener getOnTextMatchedListener() {
         return mListener;
     }
 
-    public void setOnMobileMatchedListener(OnMobileMatchedListener listener) {
+    public void setOnTextMatchedListener(OnTextMatchedListener listener) {
         mListener = listener;
     }
 
@@ -422,7 +457,13 @@ public class FillBlankView extends EditText {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
     }
 
-    public interface OnMobileMatchedListener {
+    private boolean isEmptyString(String string) {
+        if (string == null || string.isEmpty())
+            return true;
+        return false;
+    }
+
+    public interface OnTextMatchedListener {
         void matched(boolean isMatched, String originalText);
     }
 }
