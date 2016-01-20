@@ -17,20 +17,21 @@ import android.widget.EditText;
 /**
  * FillBlankView
  * Created by woxingxiao on 2016/01/06.
+ * GitHub: https://github.com/woxingxiao/FillBlankViewDemo
  */
 public class FillBlankView extends EditText {
 
-    private int mBlankNum;
-    private int mBlankSpace;
+    private int mBlankNum; // the number of blanks
+    private int mBlankSpace; // the space between two blanks
     private int mBlankSolidColor;
     private int mBlankStrokeColor;
     private int mBlankStrokeWidth;
     private int mBlankCornerRadius;
-    private boolean isHideText;
+    private boolean isHideText; // if hide text, the contents inputted will be replaced by dots
     private int mDotSize;
     private int mDotColor;
-    private int mTextMatchedColor;
-    private int mTextNotMatchedColor;
+    private int mTextMatchedColor; // if contents matched the original text, the text will show with this color
+    private int mTextNotMatchedColor; // if contents didn't matched the original text, the text will show with this color
 
     private Paint mPaintBlank;
     private Paint mPaintText;
@@ -206,13 +207,14 @@ public class FillBlankView extends EditText {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        // draw background
         if (getBackground() == null) {
             canvas.drawColor(Color.WHITE);
         } else {
             getBackground().draw(canvas);
         }
 
+        // draw blanks
         for (int i = 0; i < mRectFs.length; i++) {
             if (i == 0 && !isEmptyString(mPrefixStr))
                 continue;
@@ -248,15 +250,16 @@ public class FillBlankView extends EditText {
             }
         }
 
+        // texts align center of the blank
         Paint.FontMetricsInt fontMetrics = mPaintText.getFontMetricsInt();
         int textCenterY = (mRect.bottom + mRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
-
+        // draw prefix of original text
         if (!isEmptyString(mPrefixStr)) {
             mPaintText.setTextAlign(Paint.Align.RIGHT);
             mPaintText.getTextBounds(mPrefixStr, 0, mPrefixStr.length(), mTextRect);
             canvas.drawText(mPrefixStr, mRectFs[1].left - mBlankSpace, textCenterY, mPaintText);
         }
-
+        // draw texts or dots on blanks
         mPaintText.setTextAlign(Paint.Align.CENTER);
         for (int i = 0; i < mBlankNum; i++) {
             if (isHideText && dotCount > 0) {
@@ -276,7 +279,7 @@ public class FillBlankView extends EditText {
                 }
             }
         }
-
+        // draw suffix of original text
         if (!isEmptyString(mSuffixStr)) {
             mPaintText.setTextAlign(Paint.Align.LEFT);
             mPaintText.getTextBounds(mSuffixStr, 0, mSuffixStr.length(), mTextRect);
@@ -288,6 +291,11 @@ public class FillBlankView extends EditText {
         return originalText;
     }
 
+    /**
+     * set text that waiting to be matched
+     *
+     * @param originalText original text
+     */
     public void setOriginalText(@NonNull String originalText) {
         this.originalText = originalText;
         if (originalText.isEmpty())
@@ -301,6 +309,13 @@ public class FillBlankView extends EditText {
         invalidate();
     }
 
+    /**
+     * set text that waiting to be matched
+     *
+     * @param originalText original text
+     * @param prefixLength show length of originalText at start
+     * @param suffixLength show length of originalText at end
+     */
     public void setOriginalText(@NonNull String originalText, int prefixLength, int suffixLength) {
         this.originalText = originalText;
         if (originalText.isEmpty())
@@ -319,13 +334,16 @@ public class FillBlankView extends EditText {
         invalidate();
     }
 
+    /**
+     * prefix + text in the blanks + suffix
+     */
     public String getFilledText() {
         StringBuilder builder = new StringBuilder();
         if (!isEmptyString(mPrefixStr))
             builder.append(mPrefixStr);
         for (String s : mBlankStrings)
             builder.append(s);
-        if (mSuffixStr != null)
+        if (!isEmptyString(mSuffixStr))
             builder.append(mSuffixStr);
         return builder.toString();
     }
@@ -334,6 +352,9 @@ public class FillBlankView extends EditText {
         return mBlankNum;
     }
 
+    /**
+     * set number of blanks
+     */
     public void setBlankNum(int blankNum) {
         if (!isEmptyString(mPrefixStr) || !isEmptyString(mSuffixStr))
             return;
@@ -353,6 +374,9 @@ public class FillBlankView extends EditText {
         return mBlankSpace;
     }
 
+    /**
+     * set distance between tow blanks
+     */
     public void setBlankSpace(int blankSpace) {
         mBlankSpace = blankSpace;
         if (mBlankSpace < 0) {
@@ -402,6 +426,9 @@ public class FillBlankView extends EditText {
         return isHideText;
     }
 
+    /**
+     * use dots to replace text or not
+     */
     public void setHideText(boolean isHideText) {
         this.isHideText = isHideText;
         invalidate();
@@ -451,10 +478,6 @@ public class FillBlankView extends EditText {
 
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
-    }
-
-    private int sp2px(int sp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
     }
 
     private boolean isEmptyString(String string) {
