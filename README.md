@@ -9,3 +9,18 @@
 >**text inputs**
 
 ![demo3](https://github.com/woxingxiao/FillBlankViewDemo/blob/master/screenshots/demo3.png)
+
+###Attributes
+attr | format
+-------- | ---
+blankNum|integer
+blankSpace|dimension
+blankSolidColor|color
+blankStrokeColor|color
+blankStrokeWidth|dimension
+blankCornerRadius|dimension
+hideText|boolean
+dotSize|dimension
+dotColor|color
+textMatchedColor|color
+textNotMatchedColor|color
