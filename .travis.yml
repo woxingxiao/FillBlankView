@@ -48,8 +48,7 @@ before_install:
  - chmod +x gradlew
 
 script:
-  - android list target
-  - ./gradlew connectedAndroidTest
+  - ./gradlew assembleDebug
 
 notifications:
        email: false
