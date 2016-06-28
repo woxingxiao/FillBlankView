@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:text="match: Android"/>
 
-    <com.repo.xw.fillblankviewdemo.FillBlankView
+    <com.repo.xw.fillblankview.FillBlankView
         android:id="@+id/fill_blank_view1"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -34,7 +34,7 @@
         android:layout_marginTop="10dp"
         android:text="match: Hello, world"/>
 
-    <com.repo.xw.fillblankviewdemo.FillBlankView
+    <com.repo.xw.fillblankview.FillBlankView
         android:id="@+id/fill_blank_view2"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -54,7 +54,7 @@
         android:layout_marginTop="10dp"
         android:text="match: 13800000000"/>
 
-    <com.repo.xw.fillblankviewdemo.FillBlankView
+    <com.repo.xw.fillblankview.FillBlankView
         android:id="@+id/fill_blank_view3"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -80,7 +80,7 @@
         android:layout_marginTop="10dp"
         android:text="match: FillBlank"/>
 
-    <com.repo.xw.fillblankviewdemo.FillBlankView
+    <com.repo.xw.fillblankview.FillBlankView
         android:id="@+id/fill_blank_view4"
         android:layout_width="match_parent"
         android:layout_height="40dp"

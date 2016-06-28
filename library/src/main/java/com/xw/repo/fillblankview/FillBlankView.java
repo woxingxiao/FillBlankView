@@ -1,4 +1,4 @@
-package com.repo.xw.fillblankviewdemo;
+package com.xw.repo.fillblankview;
 
 import android.content.Context;
 import android.content.res.TypedArray;

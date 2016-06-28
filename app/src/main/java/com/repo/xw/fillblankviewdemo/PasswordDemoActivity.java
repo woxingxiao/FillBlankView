@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.xw.repo.fillblankview.FillBlankView;
+
 public class PasswordDemoActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FillBlankView mFillBlankView1, mFillBlankView2, mFillBlankView3, mFillBlankView4;
