@@ -1,4 +1,4 @@
-package com.repo.xw.fillblankviewdemo;
+package com.xw.sample.fillblankviewdemo;
 
 import android.content.Intent;
 import android.os.Bundle;

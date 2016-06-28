@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         app:cardElevation="3dp">
 
-        <com.repo.xw.fillblankview.FillBlankView
+        <com.xw.repo.fillblankview.FillBlankView
             android:id="@+id/show_password_demo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -31,7 +31,7 @@
         android:layout_marginTop="20dp"
         app:cardElevation="3dp">
 
-        <com.repo.xw.fillblankview.FillBlankView
+        <com.xw.repo.fillblankview.FillBlankView
             android:id="@+id/show_text_demo"
             android:layout_width="match_parent"
             android:layout_height="50dp"

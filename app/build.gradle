@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.repo.xw.fillblankviewdemo"
+        applicationId "com.xw.sample.fillblankviewdemo"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 2
