@@ -1,4 +1,4 @@
-###仿手机支付宝支付数字密码输入验证，新增其他文字信息输入验证
+###仿手机支付宝支付数字密码输入验证，文字信息输入验证
 
 ###Screenshot
 
@@ -9,6 +9,13 @@
 >**text inputs**
 
 ![demo3](https://github.com/woxingxiao/FillBlankViewDemo/blob/master/screenshots/demo3.png)
+
+###Gradle
+```groovy
+dependencies{
+    compile 'com.xw.repo:fillblankview:1.0@aar'
+}
+```
 
 ###Attributes
 attr | format
