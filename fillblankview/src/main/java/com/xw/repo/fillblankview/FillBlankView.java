@@ -19,7 +19,7 @@ import android.widget.EditText;
 /**
  * FillBlankView
  * Created by woxingxiao on 2016/01/06.
- * GitHub: https://github.com/woxingxiao/FillBlankViewDemo
+ * GitHub: https://github.com/woxingxiao/FillBlankView
  */
 public class FillBlankView extends EditText {
 
