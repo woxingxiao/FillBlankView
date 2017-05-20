@@ -1,13 +1,13 @@
-###仿手机支付宝支付数字密码输入验证，文字信息输入验证
+### 仿手机支付宝支付数字密码输入验证，文字信息输入验证
 
-###Gradle
+### Gradle
 ```groovy
 dependencies{
-    compile 'com.xw.repo:fillblankview:1.0@aar'
+    compile 'com.xw.repo:fillblankview:1.1@aar'
 }
 ```
 
-###Screenshot
+### Screenshot
 
 >**password inputs**
 
@@ -17,7 +17,7 @@ dependencies{
 
 ![demo3](https://github.com/woxingxiao/FillBlankViewDemo/blob/master/screenshots/demo3.png)
 
-###XML
+### XML
 ```xml
 <com.xw.repo.fillblankview.FillBlankView
     android:id="@+id/fill_blank_view4"
@@ -52,7 +52,7 @@ dependencies{
     app:blankSpace="5dp"/>
 ```  
 
-###Attributes
+### Attributes
 attr | format
 -------- | ---
 blankNum|integer
