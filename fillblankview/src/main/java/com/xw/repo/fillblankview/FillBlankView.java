@@ -10,31 +10,20 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.widget.EditText;
 
 /**
  * FillBlankView
  * Created by woxingxiao on 2016/01/06.
  * GitHub: https://github.com/woxingxiao/FillBlankView
  */
-public class FillBlankView extends EditText {
+public class FillBlankView extends AppCompatEditText {
 
     private static final String INSTANCE_STATE = "saved_instance";
-    private static final String INSTANCE_BLANK_NUM = "blank_num";
-    private static final String INSTANCE_BLANK_SPACE = "blank_space";
-    private static final String INSTANCE_BLANK_SOLID_COLOR = "blank_solid_color";
-    private static final String INSTANCE_BLANK_STROKE_COLOR = "blank_stroke_color";
-    private static final String INSTANCE_BLANK_STROKE_WIDTH = "blank_stroke_width";
-    private static final String INSTANCE_BLANK_CORNER_RADIUS = "blank_corner_radius";
-    private static final String INSTANCE_IS_HIDE_TEXT = "is_hide_text";
-    private static final String INSTANCE_DOT_SIZE = "dot_size";
-    private static final String INSTANCE_DOT_COLOR = "dot_color";
-    private static final String INSTANCE_TEXT_MATCHED_COLOR = "text_matched_color";
-    private static final String INSTANCE_TEXT_NOT_MATCHED_COLOR = "text_not_matched_color";
     private static final String INSTANCE_PREFIX_STR = "prefix_str";
     private static final String INSTANCE_SUFFIX_STR = "suffix_str";
 
@@ -526,17 +515,6 @@ public class FillBlankView extends EditText {
     public Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
         bundle.putParcelable(INSTANCE_STATE, super.onSaveInstanceState());
-        bundle.putInt(INSTANCE_BLANK_NUM, mBlankNum);
-        bundle.putInt(INSTANCE_BLANK_SPACE, mBlankSpace);
-        bundle.putInt(INSTANCE_BLANK_SOLID_COLOR, mBlankSolidColor);
-        bundle.putInt(INSTANCE_BLANK_STROKE_COLOR, mBlankStrokeColor);
-        bundle.putInt(INSTANCE_BLANK_STROKE_WIDTH, mBlankStrokeWidth);
-        bundle.putInt(INSTANCE_BLANK_CORNER_RADIUS, mBlankCornerRadius);
-        bundle.putBoolean(INSTANCE_IS_HIDE_TEXT, isHideText);
-        bundle.putInt(INSTANCE_DOT_SIZE, mDotSize);
-        bundle.putInt(INSTANCE_DOT_COLOR, mDotColor);
-        bundle.putInt(INSTANCE_TEXT_MATCHED_COLOR, mTextMatchedColor);
-        bundle.putInt(INSTANCE_TEXT_NOT_MATCHED_COLOR, mTextNotMatchedColor);
         bundle.putString(INSTANCE_PREFIX_STR, mPrefixStr);
         bundle.putString(INSTANCE_SUFFIX_STR, mSuffixStr);
 
@@ -547,17 +525,6 @@ public class FillBlankView extends EditText {
     public void onRestoreInstanceState(Parcelable state) {
         if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
-            mBlankNum = bundle.getInt(INSTANCE_BLANK_NUM);
-            mBlankSpace = bundle.getInt(INSTANCE_BLANK_SPACE);
-            mBlankSolidColor = bundle.getInt(INSTANCE_BLANK_SOLID_COLOR);
-            mBlankStrokeColor = bundle.getInt(INSTANCE_BLANK_STROKE_COLOR);
-            mBlankStrokeWidth = bundle.getInt(INSTANCE_BLANK_STROKE_WIDTH);
-            mBlankCornerRadius = bundle.getInt(INSTANCE_BLANK_CORNER_RADIUS);
-            isHideText = bundle.getBoolean(INSTANCE_IS_HIDE_TEXT);
-            mDotSize = bundle.getInt(INSTANCE_DOT_SIZE);
-            mDotColor = bundle.getInt(INSTANCE_DOT_COLOR);
-            mTextMatchedColor = bundle.getInt(INSTANCE_TEXT_MATCHED_COLOR);
-            mTextNotMatchedColor = bundle.getInt(INSTANCE_TEXT_NOT_MATCHED_COLOR);
             mPrefixStr = bundle.getString(INSTANCE_PREFIX_STR);
             mSuffixStr = bundle.getString(INSTANCE_SUFFIX_STR);
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
