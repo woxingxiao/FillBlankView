@@ -3,7 +3,7 @@
 ### Gradle
 ```groovy
 dependencies{
-    compile 'com.xw.repo:fillblankview:1.1@aar'
+    compile 'com.xw.repo:fillblankview:2.0@aar'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies{
     app:blankStrokeWidth="1dp"
     app:dotColor="@color/green"
     app:dotSize="5dp"
-    app:hideText="true"/>
+    app:isPasswordMode="true"/>
 ```
 ```xml
 <TextView
@@ -50,7 +50,8 @@ dependencies{
     android:textSize="16sp"
     app:blankCornerRadius="4dp"
     app:blankSpace="5dp"/>
-```  
+```
+Check the demo for more usage.
 
 ### Attributes
 attr | format
@@ -61,17 +62,17 @@ blankSolidColor|color
 blankStrokeColor|color
 blankStrokeWidth|dimension
 blankCornerRadius|dimension
-hideText|boolean
+isPasswordMode|boolean
 dotSize|dimension
 dotColor|color
 textMatchedColor|color
 textNotMatchedColor|color
 
-###License
+### License
 ```
 The MIT License (MIT)
 
-Copyright (c) 2016 woxingxiao
+Copyright (c) 2017 woxingxiao
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
