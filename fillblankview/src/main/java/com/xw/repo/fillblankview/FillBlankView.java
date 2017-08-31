@@ -7,7 +7,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatEditText;
@@ -15,10 +19,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.ViewTreeObserver;
 
 /**
  * FillBlankView
+ * <p>
  * Created by woxingxiao on 2016/01/06.
+ * <p>
  * GitHub: https://github.com/woxingxiao/FillBlankView
  */
 public class FillBlankView extends AppCompatEditText {
@@ -33,11 +40,12 @@ public class FillBlankView extends AppCompatEditText {
     private int mBlankStrokeColor;
     private int mBlankStrokeWidth;
     private int mBlankCornerRadius;
-    private boolean isHideText; // if hide text, the contents inputted will be replaced by dots
+    private boolean isPasswordMode; // if true, the contents inputted will be replaced by dots
     private int mDotSize;
     private int mDotColor;
     private int mTextMatchedColor; // if contents matched the original text, the text will show with this color
     private int mTextNotMatchedColor; // if contents didn't matched the original text, the text will show with this color
+    private boolean showTextTemporarily;
 
     private Paint mPaintBlank;
     private Paint mPaintText;
@@ -48,10 +56,21 @@ public class FillBlankView extends AppCompatEditText {
     private String mPrefixStr;
     private String mSuffixStr;
     private String[] mBlankStrings;
-    private int dotCount;
+    private int mDotCount;
 
     private OnTextMatchedListener mListener;
     private String originalText;
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            mHandler.removeCallbacksAndMessages(null);
+
+            showTextTemporarily = false;
+            invalidate();
+        }
+    };
 
     public FillBlankView(Context context) {
         this(context, null);
@@ -71,14 +90,42 @@ public class FillBlankView extends AppCompatEditText {
         mBlankStrokeColor = a.getColor(R.styleable.FillBlankView_blankStrokeColor, getCurrentTextColor());
         mBlankStrokeWidth = a.getDimensionPixelSize(R.styleable.FillBlankView_blankStrokeWidth, 1);
         mBlankCornerRadius = a.getDimensionPixelSize(R.styleable.FillBlankView_blankCornerRadius, 0);
-        isHideText = a.getBoolean(R.styleable.FillBlankView_hideText, false);
+        isPasswordMode = a.getBoolean(R.styleable.FillBlankView_isPasswordMode, false);
         mDotSize = a.getDimensionPixelSize(R.styleable.FillBlankView_dotSize, dp2px(4));
         mDotColor = a.getColor(R.styleable.FillBlankView_dotColor, getCurrentTextColor());
         mTextMatchedColor = a.getColor(R.styleable.FillBlankView_textMatchedColor, getCurrentTextColor());
         mTextNotMatchedColor = a.getColor(R.styleable.FillBlankView_textNotMatchedColor, getCurrentTextColor());
         a.recycle();
 
+        int inputType = getInputType();
+        if (inputType == 129 || inputType == 145 || inputType == 18 || inputType == 225) {
+            isPasswordMode = true;
+        }
+        String text = getText().toString();
+        if (!text.isEmpty()) {
+            mBlankNum = text.length();
+        }
         initObjects();
+
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= 16) {
+                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+
+                setText(getText());
+                if (isClickable()) {
+                    setFocusable(true);
+                    setFocusableInTouchMode(true);
+                    requestFocus();
+                }
+
+                mHandler.sendEmptyMessage(0);
+            }
+        });
     }
 
     private void initObjects() {
@@ -119,13 +166,12 @@ public class FillBlankView extends AppCompatEditText {
             public void afterTextChanged(Editable s) {
                 if (s.length() > mBlankNum) {
                     getText().delete(s.length() - 1, s.length());
-                    dotCount = mBlankNum;
+                    mDotCount = mBlankNum;
                     return;
                 }
-                dotCount = s.length();
 
                 mPaintText.setColor(getCurrentTextColor());
-                if (isHideText) {
+                if (isPasswordMode) {
                     mPaintDot.setColor(mDotColor);
                 }
                 for (int i = 0; i < mBlankNum; i++) {
@@ -139,7 +185,7 @@ public class FillBlankView extends AppCompatEditText {
                 if (getFilledText().equals(originalText)) {
                     if (s.length() == mBlankNum) {
                         mPaintText.setColor(mTextMatchedColor);
-                        if (isHideText && mTextMatchedColor != getCurrentTextColor()) {
+                        if (isPasswordMode && mTextMatchedColor != getCurrentTextColor()) {
                             mPaintDot.setColor(mTextMatchedColor);
                         }
                     }
@@ -149,7 +195,7 @@ public class FillBlankView extends AppCompatEditText {
                 } else {
                     if (s.length() == mBlankNum) {
                         mPaintText.setColor(mTextNotMatchedColor);
-                        if (isHideText && mTextNotMatchedColor != getCurrentTextColor()) {
+                        if (isPasswordMode && mTextNotMatchedColor != getCurrentTextColor()) {
                             mPaintDot.setColor(mTextNotMatchedColor);
                         }
                     }
@@ -158,7 +204,24 @@ public class FillBlankView extends AppCompatEditText {
                     }
                 }
 
-                invalidate();
+                int length = s.length();
+                if (length <= mDotCount) { // deleting
+                    mDotCount = length;
+                    invalidate();
+
+                    return;
+                }
+
+                mDotCount = length;
+
+                if (isPasswordMode) {
+                    showTextTemporarily = true;
+                    invalidate();
+
+                    mHandler.sendEmptyMessageDelayed(0, 500);
+                } else {
+                    invalidate();
+                }
             }
         });
     }
@@ -216,7 +279,6 @@ public class FillBlankView extends AppCompatEditText {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
         // draw background
         if (getBackground() == null) {
             canvas.drawColor(Color.WHITE);
@@ -274,14 +336,23 @@ public class FillBlankView extends AppCompatEditText {
         // draw texts or dots on blanks
         mPaintText.setTextAlign(Paint.Align.CENTER);
         for (int i = 0; i < mBlankNum; i++) {
-            if (isHideText && dotCount > 0) {
-                if (i + 1 > dotCount) {
+            if (isPasswordMode && mDotCount > 0 && i <= mDotCount - 1) {
+                if (i + 1 > mDotCount) {
                     break;
                 }
-                if (isEmptyString(mPrefixStr)) {
-                    canvas.drawCircle(mRectFs[i].centerX(), mRectFs[i].centerY(), mDotSize, mPaintDot);
+                if (showTextTemporarily && i == mDotCount - 1) {
+                    mPaintText.getTextBounds(mBlankStrings[i], 0, mBlankStrings[i].length(), mTextRect);
+                    if (isEmptyString(mPrefixStr)) {
+                        canvas.drawText(mBlankStrings[i], mRectFs[i].centerX(), textCenterY, mPaintText);
+                    } else {
+                        canvas.drawText(mBlankStrings[i], mRectFs[i + 1].centerX(), textCenterY, mPaintText);
+                    }
                 } else {
-                    canvas.drawCircle(mRectFs[i + 1].centerX(), mRectFs[i + 1].centerY(), mDotSize, mPaintDot);
+                    if (isEmptyString(mPrefixStr)) {
+                        canvas.drawCircle(mRectFs[i].centerX(), mRectFs[i].centerY(), mDotSize, mPaintDot);
+                    } else {
+                        canvas.drawCircle(mRectFs[i + 1].centerX(), mRectFs[i + 1].centerY(), mDotSize, mPaintDot);
+                    }
                 }
             } else {
                 mPaintText.getTextBounds(mBlankStrings[i], 0, mBlankStrings[i].length(), mTextRect);
@@ -445,18 +516,6 @@ public class FillBlankView extends AppCompatEditText {
         invalidate();
     }
 
-    public boolean isHideText() {
-        return isHideText;
-    }
-
-    /**
-     * use dots to replace text or not
-     */
-    public void setHideText(boolean isHideText) {
-        this.isHideText = isHideText;
-        invalidate();
-    }
-
     public int getDotSize() {
         return mDotSize;
     }
@@ -533,4 +592,12 @@ public class FillBlankView extends AppCompatEditText {
         }
         super.onRestoreInstanceState(state);
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
 }

@@ -2,15 +2,15 @@
 <resources>
     <declare-styleable name="FillBlankView">
         <attr name="blankNum" format="integer"/>
-        <attr name="blankSpace" format="dimension"/>
-        <attr name="blankSolidColor" format="color"/>
-        <attr name="blankStrokeColor" format="color"/>
-        <attr name="blankStrokeWidth" format="dimension"/>
-        <attr name="blankCornerRadius" format="dimension"/>
-        <attr name="hideText" format="boolean"/>
-        <attr name="dotSize" format="dimension"/>
-        <attr name="dotColor" format="color"/>
-        <attr name="textMatchedColor" format="color"/>
-        <attr name="textNotMatchedColor" format="color"/>
+        <attr name="blankSpace" format="dimension|reference"/>
+        <attr name="blankSolidColor" format="color|reference"/>
+        <attr name="blankStrokeColor" format="color|reference"/>
+        <attr name="blankStrokeWidth" format="dimension|reference"/>
+        <attr name="blankCornerRadius" format="dimension|reference"/>
+        <attr name="isPasswordMode" format="boolean"/>
+        <attr name="dotSize" format="dimension|reference"/>
+        <attr name="dotColor" format="color|reference"/>
+        <attr name="textMatchedColor" format="color|reference"/>
+        <attr name="textNotMatchedColor" format="color|reference"/>
     </declare-styleable>
 </resources>
