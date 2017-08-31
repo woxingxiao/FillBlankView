@@ -6,28 +6,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         app:cardElevation="3dp">
 
         <com.xw.repo.fillblankview.FillBlankView
             android:id="@+id/show_password_demo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:padding="5dp"
+            android:text="Password"
             app:blankCornerRadius="4dp"/>
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:layout_marginTop="20dp"
         app:cardElevation="3dp">
 
@@ -35,8 +36,10 @@
             android:id="@+id/show_text_demo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:padding="5dp"
+            android:text="Text"
             app:blankCornerRadius="4dp"/>
     </android.support.v7.widget.CardView>
-
 </LinearLayout>

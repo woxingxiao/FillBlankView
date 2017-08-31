@@ -64,7 +64,7 @@
         app:blankSolidColor="@color/gray_light"
         app:blankSpace="10dp"
         app:blankStrokeColor="@color/gray_light"
-        app:hideText="true"
+        app:isPasswordMode="true"
         app:textMatchedColor="@color/green"
         app:textNotMatchedColor="@color/colorAccent"/>
 
