@@ -3,7 +3,6 @@ package com.xw.repo.fillblankview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -40,6 +39,7 @@ public class FillBlankView extends AppCompatEditText {
     private int mBlankStrokeColor;
     private int mBlankStrokeWidth;
     private int mBlankCornerRadius;
+    private int mBlankFocusedStrokeColor; // the stroke color of blank when it be focused.
     private boolean isPasswordMode; // if true, the contents inputted will be replaced by dots
     private int mDotSize;
     private int mDotColor;
@@ -90,6 +90,7 @@ public class FillBlankView extends AppCompatEditText {
         mBlankStrokeColor = a.getColor(R.styleable.FillBlankView_blankStrokeColor, getCurrentTextColor());
         mBlankStrokeWidth = a.getDimensionPixelSize(R.styleable.FillBlankView_blankStrokeWidth, 1);
         mBlankCornerRadius = a.getDimensionPixelSize(R.styleable.FillBlankView_blankCornerRadius, 0);
+        mBlankFocusedStrokeColor = a.getColor(R.styleable.FillBlankView_blankFocusedStrokeColor, mBlankStrokeColor);
         isPasswordMode = a.getBoolean(R.styleable.FillBlankView_isPasswordMode, false);
         mDotSize = a.getDimensionPixelSize(R.styleable.FillBlankView_dotSize, dp2px(4));
         mDotColor = a.getColor(R.styleable.FillBlankView_dotColor, getCurrentTextColor());
@@ -279,10 +280,10 @@ public class FillBlankView extends AppCompatEditText {
 
     @Override
     protected void onDraw(Canvas canvas) {
+//        super.draw(canvas);
+
         // draw background
-        if (getBackground() == null) {
-            canvas.drawColor(Color.WHITE);
-        } else {
+        if (getBackground() != null) {
             getBackground().draw(canvas);
         }
 
@@ -301,7 +302,25 @@ public class FillBlankView extends AppCompatEditText {
 
             if (mBlankStrokeWidth > 0) {
                 mPaintBlank.setStyle(Paint.Style.STROKE);
-                mPaintBlank.setColor(mBlankStrokeColor);
+                int index = 0;
+                boolean allEmpty = false;
+                for (int j = 0; j < mBlankStrings.length; j++) {
+                    if (mBlankStrings[j].isEmpty()) {
+                        if (j == 0 && mBlankStrings[j].isEmpty()) {
+                            allEmpty = true;
+                        }
+                        index = j;
+                        break;
+                    }
+                }
+                if (hasFocus() && i == index) {
+                    mPaintBlank.setColor(mBlankFocusedStrokeColor);
+                    if (index == 0 && !allEmpty) {
+                        mPaintBlank.setColor(mBlankStrokeColor);
+                    }
+                } else {
+                    mPaintBlank.setColor(mBlankStrokeColor);
+                }
                 mPaintBlank.setStrokeWidth(mBlankStrokeWidth);
                 if (mBlankSpace > 0 && mBlankSolidColor != mBlankStrokeColor) {
                     canvas.drawRoundRect(mRectFs[i], mBlankCornerRadius, mBlankCornerRadius, mPaintBlank);

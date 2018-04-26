@@ -1,9 +1,11 @@
+[![Download](https://api.bintray.com/packages/woxingxiao/maven/fillblankview/images/download.svg)](https://bintray.com/woxingxiao/maven/fillblankview/_latestVersion)
+
 ### 仿手机支付宝支付数字密码输入验证，文字信息输入验证
 
 ### Gradle
 ```groovy
 dependencies{
-    compile 'com.xw.repo:fillblankview:2.0@aar'
+    compile 'com.xw.repo:fillblankview:2.1@aar'
 }
 ```
 
@@ -26,6 +28,7 @@ dependencies{
     android:layout_marginTop="10dp"
     android:background="@color/red_light"
     android:padding="5dp"
+    app:blankNum="6"
     app:blankCornerRadius="4dp"
     app:blankSolidColor="@color/yellow"
     app:blankSpace="10dp"
@@ -62,6 +65,7 @@ blankSolidColor|color
 blankStrokeColor|color
 blankStrokeWidth|dimension
 blankCornerRadius|dimension
+blankFocusedStrokeColor|color
 isPasswordMode|boolean
 dotSize|dimension
 dotColor|color

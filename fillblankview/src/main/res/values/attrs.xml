@@ -7,6 +7,7 @@
         <attr name="blankStrokeColor" format="color|reference"/>
         <attr name="blankStrokeWidth" format="dimension|reference"/>
         <attr name="blankCornerRadius" format="dimension|reference"/>
+        <attr name="blankFocusedStrokeColor" format="color|reference"/>
         <attr name="isPasswordMode" format="boolean"/>
         <attr name="dotSize" format="dimension|reference"/>
         <attr name="dotColor" format="color|reference"/>
