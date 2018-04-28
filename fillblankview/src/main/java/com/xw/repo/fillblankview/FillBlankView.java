@@ -230,11 +230,17 @@ public class FillBlankView extends AppCompatEditText {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int width = resolveSize(dp2px(80), widthMeasureSpec);
+        int height = getPaddingTop() + getPaddingBottom() +
+                (width - getPaddingLeft() - getPaddingRight() - (mBlankNum - 1) * mBlankSpace) / mBlankNum;
+
+        setMeasuredDimension(width, resolveSize(height, heightMeasureSpec));
         initSizes();
     }
 
     private void initSizes() {
-        int viewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+        int viewWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
         int column;
         if (isEmptyString(mPrefixStr) && isEmptyString(mSuffixStr)) {
             column = mBlankNum;
@@ -246,7 +252,7 @@ public class FillBlankView extends AppCompatEditText {
         mRectFs = new RectF[column];
         int width = (viewWidth - mBlankSpace * (column - 1)) / column;
         float top = getPaddingTop();
-        float bottom = getHeight() - getPaddingBottom();
+        float bottom = getMeasuredHeight() - getPaddingBottom();
         float left;
         float right;
         for (int i = 0; i < mRectFs.length; i++) {
@@ -262,18 +268,21 @@ public class FillBlankView extends AppCompatEditText {
         }
 
         if (mBlankSpace == 0) {
+            if (mRectBig == null) {
+                mRectBig = new RectF();
+            }
             if (!isEmptyString(mPrefixStr) && !isEmptyString(mSuffixStr)) {
-                mRectBig = new RectF(mRectFs[1].left, getPaddingTop(),
-                        mRectFs[mRectFs.length - 2].right, getHeight() - getPaddingBottom());
+                mRectBig.set(mRectFs[1].left, getPaddingTop(), mRectFs[mRectFs.length - 2].right,
+                        getMeasuredHeight() - getPaddingBottom());
             } else if (!isEmptyString(mPrefixStr) && isEmptyString(mSuffixStr)) {
-                mRectBig = new RectF(mRectFs[1].left, getPaddingTop(),
-                        getWidth() - getPaddingLeft(), getHeight() - getPaddingBottom());
+                mRectBig.set(mRectFs[1].left, getPaddingTop(), getMeasuredWidth() - getPaddingLeft(),
+                        getMeasuredHeight() - getPaddingBottom());
             } else if (isEmptyString(mPrefixStr) && !isEmptyString(mSuffixStr)) {
-                mRectBig = new RectF(getPaddingLeft(), getPaddingTop(),
-                        mRectFs[mRectFs.length - 2].right, getHeight() - getPaddingBottom());
+                mRectBig.set(getPaddingLeft(), getPaddingTop(), mRectFs[mRectFs.length - 2].right,
+                        getMeasuredHeight() - getPaddingBottom());
             } else {
-                mRectBig = new RectF(getPaddingLeft(), getPaddingTop(),
-                        getWidth() - getPaddingLeft(), getHeight() - getPaddingBottom());
+                mRectBig.set(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingLeft(),
+                        getMeasuredHeight() - getPaddingBottom());
             }
         }
     }
