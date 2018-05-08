@@ -183,7 +183,7 @@ public class FillBlankView extends AppCompatEditText {
                     }
                 }
 
-                if (getFilledText().equals(originalText)) {
+                if (getAllText().equals(originalText)) {
                     if (s.length() == mBlankNum) {
                         mPaintText.setColor(mTextMatchedColor);
                         if (isPasswordMode && mTextMatchedColor != getCurrentTextColor()) {
@@ -250,19 +250,19 @@ public class FillBlankView extends AppCompatEditText {
             column = mBlankNum + 1;
         }
         mRectFs = new RectF[column];
-        int width = (viewWidth - mBlankSpace * (column - 1)) / column;
-        float top = getPaddingTop();
-        float bottom = getMeasuredHeight() - getPaddingBottom();
+        int width = (viewWidth - mBlankSpace * (column - 1) - mBlankStrokeWidth) / column;
+        float strokeHalf = mBlankStrokeWidth / 2f;
+        float top = getPaddingTop() + strokeHalf;
+        float bottom = getMeasuredHeight() - getPaddingBottom() - strokeHalf;
         float left;
         float right;
         for (int i = 0; i < mRectFs.length; i++) {
             if (i == 0) {
-                left = getPaddingLeft();
-                right = left + width;
+                left = getPaddingLeft() + strokeHalf;
             } else {
-                left = width * i + mBlankSpace * i + getPaddingLeft();
-                right = width * (i + 1) + mBlankSpace * i + getPaddingLeft();
+                left = width * i + mBlankSpace * i + getPaddingLeft() + strokeHalf;
             }
+            right = left + width;
 
             mRectFs[i] = new RectF(left, top, right, bottom);
         }
@@ -451,9 +451,21 @@ public class FillBlankView extends AppCompatEditText {
     }
 
     /**
-     * prefix + text in the blanks + suffix
+     * Get texts in the blanks
      */
     public String getFilledText() {
+        StringBuilder builder = new StringBuilder();
+        for (String s : mBlankStrings) {
+            builder.append(s);
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * prefix + text in the blanks + suffix
+     */
+    public String getAllText() {
         StringBuilder builder = new StringBuilder();
         if (!isEmptyString(mPrefixStr)) {
             builder.append(mPrefixStr);
